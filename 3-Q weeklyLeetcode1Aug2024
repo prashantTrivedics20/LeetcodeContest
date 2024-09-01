@@ -1,0 +1,44 @@
+import java.util.*;
+class Solution {
+    private Map<String, Integer> memo;
+    static int  max=0;
+    public void solve(int n, int m, Set<Integer> set, int r, int c, List<List<Integer>> grid) {
+        if (r == n) {
+            int sum = 0;
+            for (int v : set) {
+                sum += v;
+            }
+            max = Math.max(max, sum);
+            return;
+        }
+        String state = r + "-" + c + "-" + set.toString();
+        if (memo.containsKey(state)) {
+            max = Math.max(max, memo.get(state));
+            return;
+        }
+        for (int j = c; j < m; j++) {
+            int val = grid.get(r).get(j);
+            if (set.contains(val)) {
+                if (j + 1 < m) {
+                    solve(n, m, set, r, j + 1, grid);
+                } else {
+                    solve(n, m, set, r + 1, 0, grid);
+                }
+            } else {
+                set.add(val);
+                solve(n, m, set, r + 1, 0, grid);
+                set.remove(val);
+                solve(n, m, set, r, j + 1, grid);
+            }
+        }
+        memo.put(state, max);
+    }
+    public int maxScore(List<List<Integer>> grid) {
+        int n = grid.size();
+        int m = grid.get(0).size();
+        memo = new HashMap<>();
+        max = 0;
+        solve(n, m, new HashSet<>(), 0, 0, grid);
+        return max;
+    }
+}
