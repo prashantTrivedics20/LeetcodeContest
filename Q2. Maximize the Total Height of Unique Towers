@@ -1,0 +1,61 @@
+class Solution {
+    class Pair {
+        int val;
+        int fre;
+
+        public Pair(int val, int fre) {
+            this.val = val;
+            this.fre = fre;
+        }
+    }
+
+    public long maximumTotalSum(int[] arr) {
+        long ans = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int n = arr.length;
+
+        for (int v : arr) {
+            map.put(v, map.getOrDefault(v, 0) + 1);
+        }
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a, b) -> b.val - a.val);
+
+        for (int v : map.keySet()) {
+            pq.add(new Pair(v, map.get(v)));
+        }
+
+        int pre = Integer.MAX_VALUE;
+
+        while (pq.size() > 0) {
+            Pair p = pq.poll();
+            int len = p.fre;
+            int v = p.val;
+
+            if (v < pre) {
+                for (int i = 0; i < len; i++) {
+                    if (v <= 0) {
+                        return -1;
+                    }
+                    ans += v;
+                    pre = v;
+                    v = v - 1;
+                }
+            } else {
+                v = pre - 1;
+                if (v <= 0) {
+                    return -1;
+                }
+                for (int i = 0; i < len; i++) {
+                    if (v <= 0) {
+                        return -1;
+                    }
+                    ans += v;
+                    pre = v;
+                    v = v - 1;
+                }
+            }
+        }
+
+        return ans;
+    }
+}
