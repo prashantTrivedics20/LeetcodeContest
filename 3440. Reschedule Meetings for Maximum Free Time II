@@ -1,0 +1,39 @@
+class Solution {
+  public static int solve(int eventTime, List<Integer> startTime, List<Integer> endTime) {
+        List<Integer> gap = new ArrayList<>();
+        int end = 0, i = 0;
+        while (i < startTime.size()) {
+            gap.add(startTime.get(i) - end);
+            end = endTime.get(i);
+            i++;
+        }
+        gap.add(eventTime - end);
+
+        int[] right = new int[gap.size()];
+        Arrays.fill(right, 0);
+        for (i = gap.size() - 2; i >= 0; --i) {
+             right[i] = Math.max( right[i + 1], gap.get(i + 1));
+        }
+
+        int ans = 0, left = 0;
+        for (i = 1; i < gap.size(); ++i) {
+            int curGap = endTime.get(i - 1) - startTime.get(i - 1);
+            if (left >= curGap || right[i] >= curGap) {
+                ans = Math.max(ans, gap.get(i - 1) + gap.get(i) + curGap);
+            }
+            ans = Math.max(ans, gap.get(i - 1) + gap.get(i));
+            left = Math.max(left, gap.get(i - 1));
+        }
+        return ans;
+    }
+
+    public int maxFreeTime(int eventTime, int[] startTime, int[] endTime) {
+        List<Integer> startList = new ArrayList<>();
+        List<Integer> endList = new ArrayList<>();
+        for (int i = 0; i < startTime.length; i++) {
+            startList.add(startTime[i]);
+            endList.add(endTime[i]);
+        }
+        return solve(eventTime, startList, endList);
+    }
+}
