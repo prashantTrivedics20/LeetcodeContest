@@ -1,0 +1,29 @@
+import java.util.*;
+class Solution {
+    public int maxFreeTime(int eventTime, int k, int[] startTime, int[] endTime) {
+        int n = startTime.length;
+        ArrayList<Integer> gaps = new ArrayList<>();
+        for (int i = 1; i < n; i++) {
+            gaps.add(startTime[i] - endTime[i - 1]);
+        }
+        gaps.add(0, startTime[0]);
+        gaps.add(eventTime - endTime[n - 1]);
+        // System.out.println(gaps);
+        if (k == 0) {
+            return Collections.max(gaps);
+        }
+        int maxFree = 0, sum = 0, left = 0;
+        for (int right = 0; right < gaps.size(); right++) {
+            sum += gaps.get(right);
+
+            if (right - left + 1 > k + 1) {
+                sum -= gaps.get(left);
+                left++;
+            }
+
+            maxFree = Math.max(maxFree, sum);
+        }
+
+        return maxFree;
+    }
+}
