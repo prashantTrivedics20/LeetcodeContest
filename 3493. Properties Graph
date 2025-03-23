@@ -1,0 +1,67 @@
+class Solution {
+    public void dfs(int node ,HashMap<Integer,HashMap<Integer,Integer>>map ,boolean visited[])
+    {
+        visited[node]=true;
+        for(int key :map.get(node).keySet())
+        {
+            if(!visited[key])
+            {
+                dfs(key,map,visited);
+            }
+        }
+    }
+    public boolean intersect(int a[],int b[],int k)
+    {
+        int m = a.length;
+        HashMap<Integer,Integer> map =new HashMap<>();
+        HashSet<Integer>set=new HashSet<>();
+        for(int i=0;i<m;i++)
+        {
+            int val= a[i];
+            map.put(val,map.getOrDefault(val,0)+1);    
+        }
+        for(int i=0;i<m;i++)
+        {
+            int val = b[i];
+            if(map.containsKey(val)) {
+                set.add(val);
+            }
+        }
+        return set.size()>=k;
+        
+    }
+    public int numberOfComponents(int[][] properties, int k) {
+        HashMap<Integer,HashMap<Integer,Integer>>graph = new HashMap<>();
+        int n=properties.length;
+        for(int i=0;i<n;i++)
+        {
+            graph.put(i,new HashMap<Integer,Integer>());
+        }
+
+        for(int i=0;i<n;i++)
+        {
+            for(int j=i+1;j<n;j++)
+            {
+                if(intersect(properties[i],properties[j],k))
+                {
+                    graph.get(i).put(j,1);
+                    graph.get(j).put(i,1);
+                }
+            }
+        }
+        // System.out.println(graph)
+        boolean visited[] =new boolean[n];
+        int count=0;
+        for(int i=0;i<n;i++)
+        {
+            if(!visited[i])
+            {
+                dfs(i,graph ,visited);
+                count++;
+            }
+        }
+        return count;
+
+
+    }
+}
