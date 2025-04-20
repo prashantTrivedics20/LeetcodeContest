@@ -1,0 +1,21 @@
+class Solution {
+    public int maximumPossibleSize(int[] nums) {
+       int n=nums.length;
+       int pre =nums[0];
+       int max=pre;
+       int c=1;
+       for(int i=1;i<n;i++)
+       {
+        if(max>nums[i])
+        {
+            continue;
+        }
+        else
+        {
+            max=nums[i];
+            c++;
+        }
+       }
+       return c;
+    }
+}
