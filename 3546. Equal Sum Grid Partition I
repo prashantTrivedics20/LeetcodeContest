@@ -1,0 +1,63 @@
+class Solution {
+    public boolean isEqualPartition(int arr[]) {
+        int n = arr.length;
+        int total = 0;
+        for (int val : arr) total += val;
+        int prefix = 0;
+        for (int i = 0; i < n - 1; i++) {
+            prefix += arr[i];
+            int last = total - prefix;
+            if (last == prefix) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canPartitionGrid(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+
+        int arr1[][] = new int[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                arr1[i][j] = grid[i][j];
+            }
+        }
+
+        int arr2[][] = new int[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                arr2[i][j] = grid[i][j];
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 1; j < m; j++) {
+                arr1[i][j] = arr1[i][j] + arr1[i][j - 1];
+            }
+        }
+
+        for (int j = 0; j < m; j++) {
+            for (int i = 1; i < n; i++) {
+                arr2[i][j] = arr2[i][j] + arr2[i - 1][j];
+            }
+        }
+
+        int check1[] = new int[n]; 
+        int check2[] = new int[m]; 
+
+        for (int i = 0; i < n; i++) {
+            check1[i] = arr1[i][m - 1]; 
+        }
+        for (int i = 0; i < m; i++) {
+            check2[i] = arr2[n - 1][i]; 
+        }
+
+        boolean flag1 = false, flag2 = false;
+        if (n >= 2) flag1 = isEqualPartition(check1);
+        if (m >= 2) flag2 = isEqualPartition(check2);
+
+        return flag1 || flag2;
+    }
+}
