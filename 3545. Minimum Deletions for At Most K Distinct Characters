@@ -1,0 +1,34 @@
+class Solution {
+    class Pair{
+        char ch;
+        int fre;
+        public Pair(char ch ,int fre){
+            this.ch=ch;
+            this.fre=fre;
+        }
+    }
+    public int minDeletion(String s, int k) {
+        int n=s.length();
+        HashMap<Character,Integer>map=new HashMap<>();
+        for(int i=0;i<n;i++)
+        {
+            char ch=s.charAt(i);
+            map.put(ch,map.getOrDefault(ch,0)+1);
+        }
+
+        PriorityQueue<Pair> pq=new PriorityQueue<>((a,b)->a.fre-b.fre);
+        for(char ch:map.keySet())
+        {
+            pq.add(new Pair(ch,map.get(ch)));
+        }
+        int count=0;
+        while(pq.size()>k)
+        {
+           Pair p= pq.poll();
+           count+=p.fre;
+        }
+        return count;
+
+        
+    }
+}
