@@ -1,0 +1,36 @@
+class Solution {
+    public void dfs(int[][] grid, int[] sum, boolean[][] visited, int n, int m, int i, int j) {
+        if (i >= n || j >= m || i < 0 || j < 0 || visited[i][j] || grid[i][j] == 0) {
+            return;
+        }
+
+        sum[0] += grid[i][j];
+        visited[i][j] = true;
+
+        dfs(grid, sum, visited, n, m, i, j + 1); 
+        dfs(grid, sum, visited, n, m, i, j - 1);
+        dfs(grid, sum, visited, n, m, i + 1, j); 
+        dfs(grid, sum, visited, n, m, i - 1, j);
+    }
+
+    public int countIslands(int[][] grid, int k) {
+        int ans = 0;
+        int n = grid.length;
+        int m = grid[0].length;
+        boolean[][] visited = new boolean[n][m];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] != 0 && !visited[i][j]) {
+                    int[] sum = new int[1]; 
+                    dfs(grid, sum, visited, n, m, i, j);
+                    if (sum[0] % k == 0) {
+                        ans++;
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+}
