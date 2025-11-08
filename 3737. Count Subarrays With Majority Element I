@@ -1,0 +1,26 @@
+class Solution {
+    public int countMajoritySubarrays(int[] nums, int target) {
+       int n=nums.length;
+        int c=0;
+        for(int i=0;i<n;i++)
+        {
+            HashMap<Integer,Integer>map=new HashMap<>();
+            int max=0;
+            int ele=0;
+            for(int j=i;j<n;j++)
+                {
+                 int val= nums[j];
+                 int len = j-i+1;
+                 map.put(val,map.getOrDefault(val,0)+1);
+                 if(max<map.get(val))
+                 {
+                     max = map.get(val);
+                     ele =val;
+                 }
+                if(max>(len/2)&&ele==target) c++;
+                    
+                }
+        }
+        return c;
+    }
+}
